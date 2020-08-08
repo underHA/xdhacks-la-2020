@@ -41,22 +41,21 @@ class Spotify(commands.Cog):
                 # This is broken
                 sp_track = sp.track(activity.track_id)
                 sp_artist = sp.artist(sp_track["artists"][0]["id"])
+                genres = sp_artist['genres']
 
-                await ctx.send(f"{user} is listening to **{activity.title}** by {activity.artist}.\nGenres: {', '.join(sp_artist['genres'])}")
+                await ctx.send(f"{user} is listening to **{activity.title}** by {activity.artist}.\nGenres: {', '.join(genres)}")
                 return
         await ctx.send(f'{user} is not listening to a song.')
     
 
-    # TODO: Figure out how to not fire more than once
+    # TODO: Figure out how to not fire more than once if in multiple servers
     # Check if user's Spotify changed
-
-    """
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
-        print("test")
-
         old_track = '' 
         new_track = ''
+
+        track_activity = {}
 
         if before.id not in Spotify.user_tracks:
             Spotify.user_tracks[str(before.id)] = ''
@@ -70,16 +69,24 @@ class Spotify(commands.Cog):
         for activity in after.activities:
             if isinstance(activity, discord.Spotify):
                 new_track = activity.track_id
+                track_activity = activity
 
-        # print(f"{old_track != new_track}, {new_track != ''}, {new_track != user_tracks[str(before.id)]}")
 
         # If the user changed Spotify tracks
         if old_track != new_track and new_track != '' and new_track != Spotify.user_tracks[str(after.id)]:
             # before in this context is used as Discord ID
-            print(new_track)
+  
+
+            # If we got here, then the bot can detect if a user switches to a new song
             Spotify.user_tracks[str(after.id)] = new_track
-            await self.bot.get_channel(738607027022069840).send('user changed to new track')
-    """
+
+            sp_track = sp.track(activity.track_id)
+            sp_artist = sp.artist(sp_track["artists"][0]["id"])
+            genres = sp_artist['genres']
+
+            # Posts a message in testing everytime a new song is played
+            # To retrieve genres: 
+            await self.bot.get_channel(741774089232056472).send(f"{after} is now listening to **{activity.title}** by {activity.artist}.\nGenres: {', '.join(genres)}")
 
 
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
