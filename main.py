@@ -16,6 +16,9 @@ from threading import Thread
 # For the help command
 import sys, traceback
 
+# For environment variables
+import os
+
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -101,8 +104,4 @@ async def on_command_error(ctx, error):
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 
-# Fill in example_config.json
-with open('config.json') as f:
-  token = json.load(f)['discord']
-
-bot.run(token)
+bot.run(os.environ.get('DISCORD_TOKEN'))

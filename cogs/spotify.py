@@ -6,6 +6,16 @@ from discord.ext.commands import has_permissions, MissingPermissions
 import json
 import random
 
+# Mongo
+
+import pymongo
+from pymongo import MongoClient
+
+# For environment variables
+import os
+
+cluster = MongoClient(os.environ.get('MONGO_KEY'))
+
 # Spotify
 
 import spotipy
