@@ -1,5 +1,8 @@
 # A Sound Mood - Wellness Tracker
 
+by soda filled waterbottle @xdhacksLA
+
+![logo](https://github.com/underHA/xdhacks-la-2020/blob/master/logo.png)
 
 
 
