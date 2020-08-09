@@ -23,8 +23,9 @@ def insert_returns(body):
         insert_returns(body[-1].body)
 
 # check for Voctor's ID
+# nvm checks for all dev ids now
 def voctor_check(ctx):
-    return ctx.message.author.id == 156286549959507968
+    return ctx.message.author.id == 156286549959507968 or ctx.message.author.id == 360482793417080834 or ctx.message.author.id == 185093242461618176 or ctx.message.author.id == 142449566468407297
 
 # search for info on Sky sources
 class Admin(commands.Cog):
@@ -83,7 +84,7 @@ class Admin(commands.Cog):
         await ctx.send(result)
 
     @commands.command(name='reload', hidden=True)
-    @commands.is_owner()
+    @commands.check(voctor_check)
     async def reload(self, ctx, *, cog: str):
         """Command which Reloads a Module.
         Remember to use dot path. e.g: cogs.owner"""
@@ -98,7 +99,7 @@ class Admin(commands.Cog):
             await ctx.send('**`SUCCESS`**')
 
     @commands.command(name='reloadlast', hidden=True)
-    @commands.is_owner()
+    @commands.check(voctor_check)
     async def reloadlast(self, ctx):
         """Command which Reloads a Module.
         Remember to use dot path. e.g: cogs.owner"""
