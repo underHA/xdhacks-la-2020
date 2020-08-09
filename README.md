@@ -44,11 +44,11 @@ Further statistical analysis could be done on each user’s song history provide
 
 # Technologies used
 
-Python
-GitHub
-Heroku
-Cloud storage
-MongoDB
-Discord.py
-Spotipy
+- Python
+- GitHub
+- Heroku
+- Cloud storage
+- MongoDB
+- Discord.py
+- Spotipy
 
