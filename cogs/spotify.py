@@ -29,6 +29,14 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 badList = ["edm", "r&b", "rap", "trap", "hip hop", "metal", "punk"]
 goodList = ["jazz", "classical", "lo-fi", "chill"]
 
+recommendations = {
+    "homework": ["https://open.spotify.com/playlist/0vvXsWCC9xrXsKd4FyS8kM?si=2KgUX9YWQpKlONqAhHLnXg", "https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn?si=pG_GlF0DQs2NSr3QuGRtzg", "https://open.spotify.com/playlist/5FmmxErJczcrEwIFGIviYo?si=VX6gnAMtRv-7EKHEi-LLaA"],
+    "meditation": ["https://open.spotify.com/playlist/37i9dQZF1DWZqd5JICZI0u?si=Qm89fctiT_mtmin_BAQwHg", "https://open.spotify.com/playlist/37i9dQZF1DX9uKNf5jGX6m?si=GzFEJTTBTyaqoc4I8_0SYg","https://open.spotify.com/playlist/37i9dQZF1DX1tuUiirhaT3?si=HAQSjuvTSSeEh7O11_Fb5A"],
+    "driving": ["https://open.spotify.com/playlist/37i9dQZF1DX9wC1KY45plY?si=6a-1Cyq0SESYd2bK3hVjtw", "https://open.spotify.com/playlist/37i9dQZF1DWWiDhnQ2IIru?si=aOvv-eB4TS6FFjorvuIDfA","https://open.spotify.com/playlist/37i9dQZF1DXdOEFt9ZX0dh?si=w5zgsJmGQPKVxZwmqljtHA"],
+    "exercise": ["https://open.spotify.com/playlist/37i9dQZF1DXdejmG21jbny?si=-apGiFVTRUCJDs2l06aOMw", "https://open.spotify.com/playlist/37i9dQZF1DWUI1rlvkdQnb?si=wWdQf-z-TwOHxHl8Xp26UA", "https://open.spotify.com/playlist/37i9dQZF1DX4Y1uAfxGdKJ?si=lIopcXBYRHmWSiUW8B-NaA"],
+    "workout": ["https://open.spotify.com/playlist/37i9dQZF1DXdejmG21jbny?si=-apGiFVTRUCJDs2l06aOMw", "https://open.spotify.com/playlist/37i9dQZF1DWUI1rlvkdQnb?si=wWdQf-z-TwOHxHl8Xp26UA", "https://open.spotify.com/playlist/37i9dQZF1DX4Y1uAfxGdKJ?si=lIopcXBYRHmWSiUW8B-NaA"],
+}
+
 # Sending announcements to other servers based on the on_ready event in main
 class Spotify(commands.Cog):
     def __init__(self, bot):
@@ -40,10 +48,13 @@ class Spotify(commands.Cog):
         Check what song someone is playing on Spotify.
         """
         if ctx.invoked_subcommand is None:
-            await ctx.send('Invalid command passed...')
+            await ctx.send('Invalid command passed. Use the `?help spotify` command to learn more.')
 
     @spotify.command()
     async def check(self, ctx, user: discord.Member=None):
+        """
+        Check what song a user is playing on Spotify with its associated genres.
+        """
         user = user or ctx.author
 
         for activity in user.activities:
@@ -74,7 +85,7 @@ class Spotify(commands.Cog):
 
         # Check if user is already in database, add them if not
         if not collection.find_one({"id_":after.id}):
-            collection.insert_one({"id_":after.id, "streak": 0, "track": ""})
+            collection.insert_one({"id_":after.id, "streak": 0, "track": "", "wellness": 50})
 
         # Compare before
         for activity in before.activities:
@@ -116,9 +127,17 @@ class Spotify(commands.Cog):
 
                 # Set user's wellness song streak to 0
                 collection.update_one({"id_": after.id}, {"$set": {"streak": 0}})
+
+                # Wellness score
+                collection.update_one({"id_": after.id}, {"$inc": {"wellness": -7}})
+
+
             else:
                 # Else, increment their song streak
                 collection.update_one({"id_": after.id}, {"$inc": {"streak": 1}})
+
+                # Wellness score
+                collection.update_one({"id_": after.id}, {"$inc": {"wellness": 4}})
 
                 new_user = collection.find_one({"id_":after.id})
                 
@@ -129,17 +148,42 @@ class Spotify(commands.Cog):
 
     @commands.command(name="optout")
     async def optout(self, ctx):
+        """
+        Opt-out of A Sound Mind.
+        """
         optout.insert_one({"_id": ctx.author.id})
         await ctx.send(f"You have **opted out** of A Sound Mood. To join the program again, use ?optin.")
 
     @commands.command(name="optin")
     async def optin(self, ctx):
+        """
+        Opt into A Sound Mind.
+        """
         optout.delete_one({"_id": ctx.author.id})
         await ctx.send(f"You have **opted into** A Sound Mood. To leave the program, use ?optout.")
 
     @commands.command(name="activity", aliases=["recommend"])
     async def activity(self, ctx, activity:str):
-        await ctx.send(f"hi, you want {activity}?")
+        """
+        Recommends playlists based on your activity.
+        Currently supported activities: homework, meditation, driving, exercise, workout
+        """
+        if activity.lower() not in recommendations.keys():
+            await ctx.send(f"Sorry, I don't have a playlist for that! Maybe you could try `?activity {random.choice(list(recommendations.keys()))}`.")
+        else:
+
+            playlists = ''
+            
+            for i in range(len(recommendations[activity.lower()])): 
+                playlists += f'\n[Playlist {i+1}]({recommendations[activity.lower()][i]})'
+
+            embed = discord.Embed(title=f"A Sound Mood's Recommendations for {activity.lower()}",
+                description=playlists,
+                color=random.randint(0, 0xFFFFFF))
+
+            embed.set_footer(text=f"Requested by @{ctx.message.author}", icon_url=ctx.message.author.avatar_url)
+
+            await ctx.send('', embed=embed)
 
     @activity.error
     async def activity_error(self, ctx, error):
@@ -147,6 +191,9 @@ class Spotify(commands.Cog):
 
     @commands.command(name="stats", aliases=["stat", "score"])
     async def stats(self, ctx, user: discord.Member=None):
+        """
+        Check your Soundness Streak or another user's Soundness.
+        """
         user = user or ctx.author
 
         if optout.find_one({"_id": user.id}) or not collection.find_one({"id_":user.id}):
@@ -156,7 +203,8 @@ class Spotify(commands.Cog):
                 color=random.randint(0, 0xFFFFFF))
         
             embed.set_thumbnail(url=user.avatar_url)
-            embed.add_field(name="Streak", value=collection.find_one({"id_":user.id})["streak"])
+            embed.add_field(name="Streak", value=f'{collection.find_one({"id_":user.id})["streak"]} songs')
+            embed.add_field(name="Wellness Score", value=collection.find_one({"id_":user.id})["wellness"])
 
             embed.set_footer(text=f"Requested by @{ctx.message.author}", icon_url=ctx.message.author.avatar_url)
 
