@@ -4,7 +4,7 @@ by soda filled waterbottle @xdhacksLA
 
 ![logo](https://github.com/underHA/xdhacks-la-2020/blob/master/logo.png)
 
-Music tracker to improve mental health and wellness
+A music tracker to improve mental health and wellness
 
 # Inspiration
 
