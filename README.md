@@ -33,10 +33,10 @@ Some challenges that we ran into were mainly centered around user privacy. User 
 
 # What we learned
 
-- Music can affect not just a person’s mental health, but also their physical health to a great extent.
-- Interdisciplinary collaborations are essential to completing tasks on time.
-- Information privacy is especially important to users regarding mental health.
-- Gamification is an effective method to retain engagement.
+- Music can affect not just a person’s mental health, but also their physical health to a great extent
+- Interdisciplinary collaborations are essential to completing tasks on time
+- Information privacy is especially important to users regarding mental health
+- Gamification is an effective method to retain engagement
 
 # What's next
 
