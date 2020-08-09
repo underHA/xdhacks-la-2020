@@ -2,6 +2,8 @@
 
 by soda filled waterbottle @xdhacksLA
 
+https://www.youtube.com/watch?v=DTWPGfeU49o
+
 ![logo](https://github.com/underHA/xdhacks-la-2020/blob/master/logo.png)
 
 A music tracker to improve mental health and wellness
