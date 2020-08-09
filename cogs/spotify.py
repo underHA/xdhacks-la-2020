@@ -13,7 +13,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
 
-
+badList = ["pop", "edm", "r&b", "rap", "trap", "hip hop", "metal", "punk", "rock"]
 
 # Sending announcements to other servers based on the on_ready event in main
 class Spotify(commands.Cog):
@@ -84,9 +84,14 @@ class Spotify(commands.Cog):
             sp_artist = sp.artist(sp_track["artists"][0]["id"])
             genres = sp_artist['genres']
 
+
             # Posts a message in testing everytime a new song is played
             # To retrieve genres: 
             await self.bot.get_channel(741774089232056472).send(f"{after} is now listening to **{activity.title}** by {activity.artist}.\nGenres: {', '.join(genres)}")
+            
+            if any(g in genre for genre in genres for g in badList):
+                await self.bot.get_user(id=int(after.id)).send("It looks like you are listening to a song that could decrease your productivity.")
+        
 
 
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
