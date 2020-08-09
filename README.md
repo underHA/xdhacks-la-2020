@@ -5,6 +5,7 @@ by soda filled waterbottle @ XdHacks-LA
 ![logo](https://github.com/underHA/xdhacks-la-2020/blob/master/logo.png)
 
 A music tracker to improve mental health and wellness
+
 Access our prototype: https://discord.gg/AjbBMr2 
 
 ## Inspiration
