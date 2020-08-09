@@ -92,6 +92,9 @@ class Spotify(commands.Cog):
             if any(g in genre for genre in genres for g in badList):
                 await self.bot.get_user(id=int(after.id)).send("It looks like you are listening to a song that could decrease your productivity.")
         
+    @commands.command(name="activity", aliases=["recommend"])
+    async def activity(self, ctx, activity:str):
+        await ctx.send(f"hi, you want {activity}?")
 
 
 # The setup fucntion below is neccesarry. Remember we give bot.add_cog() the name of the class in this case MembersCog.
