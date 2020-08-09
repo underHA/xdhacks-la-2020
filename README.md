@@ -2,8 +2,6 @@
 
 by soda filled waterbottle @xdhacksLA
 
-https://www.youtube.com/watch?v=DTWPGfeU49o
-
 ![logo](https://github.com/underHA/xdhacks-la-2020/blob/master/logo.png)
 
 A music tracker to improve mental health and wellness
@@ -57,3 +55,6 @@ Further statistical analysis could be done on each user’s song history provide
 - Discord.py
 - Spotipy
 
+# Video
+
+https://www.youtube.com/watch?v=DTWPGfeU49o
